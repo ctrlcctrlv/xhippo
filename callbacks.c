@@ -33,7 +33,6 @@ gboolean handle_button_press(GtkWidget *widget, GdkEventButton *event,
   if (widget == filelist) {
     /* The click was on the list. Get the clicked file. */
 
-#ifdef USEGTK2
     GtkTreePath *path;
 
     if (gtk_tree_view_get_path_at_pos(GTK_TREE_VIEW(filelist),
@@ -43,11 +42,6 @@ gboolean handle_button_press(GtkWidget *widget, GdkEventButton *event,
       row = indices[0];
       gtk_tree_path_free(path);
     }
-#else
-    gtk_clist_get_selection_info(GTK_CLIST(filelist),
-				 event->x, event->y,
-				 &row, NULL);
-#endif
   }
 
   if (event->button == 3) {
@@ -157,20 +151,12 @@ void handle_prev(GtkButton *widget, gpointer data) {
 void set_mini() {
   if (attribute_mini) {
     gtk_widget_hide(list_box);
-#ifdef USEGTK2
     gtk_window_resize(GTK_WINDOW(window), attribute_width, 1);
-#else
-    gtk_widget_set_usize(window, attribute_width, -1);
-#endif
   } else {
     gtk_widget_show(list_box);
     sync_list();
 
-#ifdef USEGTK2
     gtk_window_resize(GTK_WINDOW(window), attribute_width, attribute_height);
-#else
-    gtk_widget_set_usize(window, attribute_width, attribute_height);
-#endif
   }
 }
 
@@ -260,11 +246,7 @@ static void popup_songinfo_window(int song) {
   /* Make sure we've got the information we need. */
   read_song_info(sinfo, NULL);
 
-#ifdef USEGTK2
   sinfo->info_window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
-#else
-  sinfo->info_window = gtk_window_new(GTK_WINDOW_DIALOG);
-#endif
   gtk_window_set_title(GTK_WINDOW(sinfo->info_window), _("Song information"));
   gtk_signal_connect(GTK_OBJECT(sinfo->info_window), "destroy",
 		     GTK_SIGNAL_FUNC(handle_info_destroy), sinfo);
@@ -417,25 +399,14 @@ gboolean handle_destroy(GtkWidget *widget, GdkEvent *event, gpointer data) {
 /* Handle "configure" events (moves & resizes) of the main window. */
 gboolean handle_configure(GtkWidget *widget, GdkEventConfigure *event,
 			  gpointer data) {
-#ifdef USEGTK2
   gtk_window_get_position(GTK_WINDOW(widget),
 			  &attribute_xpos, &attribute_ypos);
-#else
-  gdk_window_get_root_origin(widget->window, 
-			     &attribute_xpos, &attribute_ypos);
-#endif
 
   /* Don't bother if we're making the window small */
   if (attribute_mini) return FALSE;
 
-#ifdef USEGTK2
   gtk_window_get_size(GTK_WINDOW(widget),
 		      &attribute_width, &attribute_height);
-#else
-  gdk_window_get_geometry(widget->window, NULL, NULL,
-			  &attribute_width, &attribute_height,
-			  NULL);
-#endif
   return FALSE;
 }
 

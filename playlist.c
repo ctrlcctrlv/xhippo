@@ -31,9 +31,7 @@ static int add_directory_callback(const char *name, const struct stat *sb,
 				  int flag, struct FTW *ftw);
 #endif
 static void kill_child(int signal);
-#ifdef USEGTK2
 static gboolean iter_from_position(gint item, GtkTreeIter *iter);
-#endif
 static void freeze_list();
 static void thaw_list();
 static void select_list_row(gint item);
@@ -52,47 +50,35 @@ gint last_played = -1,
   last_row_clicked = -1;
 fileaction *last_action = NULL;
 
-#ifdef USEGTK2
 /* Get a GtkTreeIter pointing at a given row in the list. */
 static gboolean iter_from_position(gint item, GtkTreeIter *iter) {
   if (item < 0) return FALSE;
   return gtk_tree_model_iter_nth_child(GTK_TREE_MODEL(filestore), iter,
 				       NULL, item);
 }
-#endif
 
 /* Freeze the song list. */
 static void freeze_list() {
-#ifdef USEGTK2
-  /* TreeViews don't appear to support freezing/thawing. */
-#else
-  gtk_clist_freeze(GTK_CLIST(filelist));
-#endif
+  /* TreeViews (under GTK2) don't appear to support freezing/thawing. */
+  //gtk_clist_freeze(GTK_CLIST(filelist));
 }
 
 /* Thaw the song list. */
 static void thaw_list() {
-#ifndef USEGTK2
-  gtk_clist_thaw(GTK_CLIST(filelist));
-#endif
+  //gtk_clist_thaw(GTK_CLIST(filelist));
 }
 
 /* Select a given row in the list and scroll to make it visible if
    necessary. */
 static void select_list_row(gint item) {
-#ifdef USEGTK2
   GtkTreeIter iter;
   GtkTreeSelection *selection;
 
   if (!iter_from_position(item, &iter)) return;
   selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(filelist));
   gtk_tree_selection_select_iter(selection, &iter);
-#else
-  gtk_clist_select_row(GTK_CLIST(filelist), item, 0);
-#endif
 
   if (mode_scroll_catchup && GTK_WIDGET_REALIZED(filelist)) {
-#ifdef USEGTK2
     GdkRectangle row, vis;
     GtkTreePath *path = gtk_tree_path_new();
     gtk_tree_path_append_index(path, item);
@@ -107,18 +93,11 @@ static void select_list_row(gint item) {
       gtk_tree_view_scroll_to_cell(GTK_TREE_VIEW(filelist), path, NULL,
 				   TRUE, 0.5, 0.0);
     }
-#else
-    if (gtk_clist_row_is_visible(GTK_CLIST(filelist), item)
-	!= GTK_VISIBILITY_FULL) {
-      gtk_clist_moveto(GTK_CLIST(filelist), item, 0, 0.5, 0.0);
-    }
-#endif
   }
 }
 
 /* Clear the list. */
 static void clear_list() {
-#ifdef USEGTK2
   GtkTreeIter iter;
 
   /* Destroy all the list's songinfo structures. */
@@ -134,14 +113,10 @@ static void clear_list() {
   }
   
   gtk_list_store_clear(GTK_LIST_STORE(filestore));
-#else
-  gtk_clist_clear(GTK_CLIST(filelist));
-#endif
 }
 
 /* Remove a row from the list. */
 static void remove_list_row(gint item) {
-#ifdef USEGTK2
   GtkTreeIter iter;
   gpointer sinfo;
 
@@ -151,14 +126,10 @@ static void remove_list_row(gint item) {
 		     -1);
   destroy_songinfo(sinfo);
   gtk_list_store_remove(GTK_LIST_STORE(filestore), &iter);
-#else
-  gtk_clist_remove(GTK_CLIST(filelist), item);
-#endif
 }
 
 /* Insert a row in the list. */
 static void insert_list_row(songinfo *sinfo, gint item) {
-#ifdef USEGTK2
   GtkTreeIter iter;
 
   gtk_list_store_insert(GTK_LIST_STORE(filestore), &iter, item);
@@ -169,14 +140,6 @@ static void insert_list_row(songinfo *sinfo, gint item) {
   /* Note: in the CList version, we add destroy_songinfo as a hook
      with the data. In the Tree version, we call it when rows are
      removed. */
-#else
-  gchar *row[1];
-  
-  row[0] = sinfo->display_name;
-  gtk_clist_insert(GTK_CLIST(filelist), item, row);
-  gtk_clist_set_row_data_full(GTK_CLIST(filelist), item, sinfo,
-			      destroy_songinfo);
-#endif
 }
 
 /* Send a signal to the child process (or process group). */
@@ -853,7 +816,6 @@ void insert_row(songinfo *sinfo, gint location) {
 
 /* Get a pointer to a song's songinfo. */
 songinfo *get_songinfo(gint number) {
-#ifdef USEGTK2
   GtkTreeIter iter;
   gpointer sinfo;
 
@@ -862,9 +824,6 @@ songinfo *get_songinfo(gint number) {
 		     SONGINFO_COLUMN, &sinfo,
 		     -1);
   return (songinfo *)sinfo;
-#else
-  return (songinfo *)gtk_clist_get_row_data(GTK_CLIST(filelist), number);
-#endif
 }
 
 /* Move a row from one location to another within the list. */

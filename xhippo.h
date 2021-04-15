@@ -160,14 +160,12 @@ extern GtkWidget *window, *restartbutton, *stopbutton, *buttons_box,
   *scrollbar, *upbutton, *downbutton, *deletebutton, *popupmenu,
   *up_item, *down_item, *delete_item, *info_item, *eventbox,
   *prefs_window, *prefs_all_box;
-#ifdef USEGTK2
 extern GtkListStore *filestore;
 enum {
   SONGINFO_COLUMN,
   TITLE_COLUMN,
   NUM_COLUMNS
 };
-#endif
 extern GtkAdjustment *vadj;
 extern GtkAccelGroup *accel_group;
 extern int sigchld_pipe[2];

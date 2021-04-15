@@ -1,3 +1,11 @@
+2021-04-15  Fredrick Brennan <copypaste@kittens.ph>
+	* xhippo.config: Used ffplay instead of mpeg123, ogg123.
+
+	* configure.in: Changed version to 4. 
+
+	* everything: Disabled support for building with GTK1, now all
+	builds are GTK2. Disabled linking to old, unsupported GNOME APIs.
+
 2007-08-27  Adam Sampson  <ats@offog.org>
 
 	* everything: Put xhippo into Darcs.
@@ -1025,3 +1033,4 @@
 	widgets. Implemented using conventional C strings for now until
 	glib's string handling is better documented!
 
+# vim: set textwidth=75

@@ -1,0 +1,617 @@
+\input texinfo   @c -*-texinfo-*- 
+@c %**start of header
+@setfilename xhippo.info
+@settitle GNU xhippo
+@finalout
+@c %**end of header
+
+@set VERSION 4.0
+@set UPDATED 15th April 2021
+
+@ifinfo 
+@format 
+START-INFO-DIR-ENTRY 
+* xhippo: (xhippo.info).  A GTK-based playlist manager for various sound players.
+END-INFO-DIR-ENTRY 
+@end format 
+@end ifinfo 
+
+@ifinfo                                                                                  
+This file documents GNU @code{xhippo}, a GTK-based front-end and
+playlist manager for sound players.
+
+Copyright @copyright{} 2001, 2002, 2003, 2007 Adam Sampson
+
+Permission is granted to make and distribute verbatim copies of
+this manual provided the copyright notice and this permission notice
+are preserved on all copies.
+
+@ignore
+Permission is granted to process this file through TeX and print the
+results, provided the printed document carries copying permission
+notice identical to this one except for the removal of this paragraph
+(this paragraph not being relevant to the printed manual).
+
+@end ignore
+Permission is granted to copy and distribute modified versions of this
+manual under the conditions for verbatim copying, provided that the entire
+resulting derived work is distributed under the terms of a permission
+notice identical to this one.
+
+Permission is granted to copy and distribute translations of this manual
+into another language, under the above conditions for modified versions,
+except that this permission notice may be stated in a translation approved
+by the Free Software Foundation.
+@end ifinfo
+
+@titlepage 
+@title GNU xhippo
+@subtitle A GTK-based front-end and playlist manager for sound players
+@subtitle version @value{VERSION}
+@author Adam Sampson
+
+@page 
+@vskip 0pt plus 1filll 
+Copyright @copyright{} 2001, 2002, 2003, 2007 Adam Sampson
+
+Permission is granted to make and distribute verbatim copies of
+this manual provided the copyright notice and this permission notice
+are preserved on all copies.
+
+Permission is granted to copy and distribute modified versions of this
+manual under the conditions for verbatim copying, provided that the entire
+resulting derived work is distributed under the terms of a permission
+notice identical to this one.
+
+Permission is granted to copy and distribute translations of this manual
+into another language, under the above conditions for modified versions,
+except that this permission notice may be stated in a translation approved
+by the Free Software Foundation.
+@end titlepage 
+
+@ifinfo                                                                                          
+@node    Top, Introduction, (dir), (dir)
+@top GNU @code{xhippo}
+
+Adam Sampson, @email{ats@@offog.org}
+v@value{VERSION}, @value{UPDATED}
+
+This document gives information about how to use GNU @code{xhippo}, a
+GTK-based front-end and playlist manager for sound players.
+
+@menu
+* Introduction::                
+* Installation::                
+* Invocation::                  
+* GUI::                         
+* Config file::                 
+* gtkrc::                       
+* Distribution::                
+* Contact::                     
+@end menu
+
+@end ifinfo
+
+@node    Introduction, Installation, Top, Top
+@comment  node-name,  next,  previous,  up
+@chapter Introduction
+
+GNU @code{xhippo} is a generic playlist manager program for a variety of
+UNIX sound players. It's been shown to work with @code{mpg123},
+@code{madplay}, @code{bplay}, @code{s3mod}, @code{tracker}, @code{xmp},
+@code{mtvp}, @code{splay}, @code{ogg123} and @code{timidity}, and should
+work with more-or-less anything that can take a filename on the command
+line. It is capable of automatically deciding which player to use
+depending on a file's extension; the defaults are set in a config
+file. It uses textual playlist files, which are easily generated with
+the @code{find} or @code{locate} utilities. The interface of
+@code{xhippo} is very loosely modelled on the shareware `HippoPlayer'
+player for the Amiga.
+
+@code{xhippo} 3 is firmly in maintainance mode; I will continue to fix bugs if
+anyone finds any, but new users are strongly advised to try out the
+rewritten `Potamus' branch which will eventually become @code{xhippo} 4,
+available from @url{http://offog.org/code/potamus.html}.
+
+@code{xhippo} was developed under GNU/Linux, but it contains nothing
+Linux-specific, so it will probably work on any UNIX-like system where
+gcc, glib and GTK are available. (Additionally, it supports GNU long
+options where @samp{getopt_long} is available.)  If you're using
+NetBSD or FreeBSD, a port is available---see @xref{Installation}.
+@code{xhippo} can be compiled as a GNOME 1 application, and it can be
+compiled against GTK+ 1.2, 2.0 or 2.2. @code{xhippo} supports standard
+drag-and-drop (which works with the GNOME, KDE and ROX file managers,
+and any other supporting the standard protocol).
+
+@code{xhippo} comes with NO WARRANTY, to the extent permitted by law.
+You may redistribute copies of GNU @code{xhippo} under the terms of the
+GNU General Public License. For more information about these matters,
+see the file named @file{COPYING}.
+
+If you've installed a previous version of @code{xhippo}, read the
+@file{ChangeLog} for information on what's changed recently.
+
+@code{xhippo} uses GNU gettext for internationalisation; you can pick
+the language you want by setting your @samp{LANG} environment variable.
+If your C library's gettext support doesn't work, you can give the
+@samp{--with-included-gettext} option to the @file{configure} script to
+make it use the copy of gettext included in the package.
+
+If you've downloaded @code{xhippo}, please send me some mail to tell me
+what you think of it.  Suggestions for improvements will be gratefully
+received.
+
+@node Installation, Invocation, Introduction, Top
+@comment  node-name,  next,  previous,  up
+@chapter Installation
+
+Before reading this section, check that your operating system
+distribution doesn't already contain a package for @code{xhippo}. If it
+does, then you will probably be best off using that rather than building
+it by hand. If it doesn't, or if you want to use a more recent version,
+then read on.
+
+@code{xhippo} uses @code{GTK+}, and requires @code{GTK+ 1.2} or
+higher; it needs @code{gtk-config} in your path in order to build. It uses GNU
+@code{automake} and @code{autoconf}, so it will automatically detect
+some features of your system that can affect @code{xhippo}'s
+performance. If you have @code{libid3tag} from the @code{libmad}
+package installed (available along with the @code{madplay} MPEG audio
+player, which works well with @code{xhippo}, from
+@url{http://mad.sourceforge.net/}), @code{xhippo} will use it to read
+ID3 tags. (If you don't have it installed, @code{xhippo} will use its
+own simple implementation which only understands ID3v1.)
+
+To compile, change to the source directory and do
+
+@comment ignore
+@example
+./configure
+make
+@end example
+
+If you want (minimal) GNOME 1 support, do @samp{./configure
+--with-gnome} instead of @samp{./configure}. If you wish to use
+@code{GTK+ 2.0} or higher, do @samp{./configure --with-gtk2}.  If you
+encounter problems finding GTK while building, do @samp{./configure
+--help} to find out how to specify where GTK files are stored.  If you
+want to install into a different place, do @samp{./configure
+--prefix=/usr/local/xhippo} or wherever.  Several other options are
+available; try @samp{./configure --help} for more information.
+
+To install the program, do
+
+@comment ignore
+@example
+make install
+@end example
+
+Each user who wants to use @code{xhippo} should create a @file{.xhippo}
+directory in their home directory.  @code{xhippo} will look for the
+@file{config} and @file{gtkrc} files there, and will save its window
+state into the @file{winstate} file there if configured to. Playlists
+should be kept in a @file{.xhippo/playlists/} directory.
+
+@code{xhippo} finds your home directory by looking for the @samp{HOME}
+environment variable. If this is not set by default, you should add a
+line of the form 
+
+@comment ignore
+@example
+export HOME=`pwd`
+@end example
+@noindent
+or your shell's equivalent to your profile script.
+
+@node Invocation, GUI, Installation, Top
+@comment  node-name,  next,  previous,  up
+@chapter Invocation
+
+   To use @code{xhippo}, you need to give it at least one playlist. You can
+either load a playlist by specifying it on the command line or in the
+config file, or you can build a playlist by dropping files from a file
+manager into the @code{xhippo} window or using the "Add Song" option on the
+pop-up menu.
+
+   Playlists are files containing names of files to play, one per
+line.  This is compatible with XMMS's playlist format, so if you have
+an XMMS playlist called @file{Nice}, you could do @samp{xhippo
+$HOME/.x11amp/Nice} to use it. (GQmpeg can also import @code{xhippo}
+playlists.)  Alternately, you can generate them with the @code{find}
+command; for instance, if you keep your .ogg files in your
+@file{$HOME/sound} directory, you could do
+
+@comment ignore
+@example
+find $HOME/sound -name *.ogg | sort >$HOME/.xhippo/playlists/ogg
+xhippo $HOME/.xhippo/playlists/ogg
+@end example
+@noindent
+to make a playlist and play it. (With a little trickery, @code{xhippo} can
+be persuaded to automatically build playlists from a directory on
+startup; see the example config file for more information.)
+
+Playlists can also include other playlists by name; to do this, put a
+line of the form
+
+@comment ignore
+@example
+!foo
+@end example
+@noindent
+in the playlist.  @code{xhippo} will then try to load the file
+@file{foo} as a playlist, inserting its entries into the list at that
+point. If the @samp{-i} command-line option or @samp{readid3}
+config-file option are enabled, @code{xhippo} will try to find ID3 tags
+in the listed files and will put them in the list rather than the
+filenames if found.
+
+To start playing automatically once a playlist is loaded, use the
+@samp{-a} option anywhere on the command line (or the @samp{autostart}
+command in the config file).
+
+You can specify multiple playlists on the command line.  Alternatively,
+you can specify the @samp{-f} option to make @code{xhippo} treat
+command-line arguments as files to be added to the playlist rather than
+playlists to load (for instance, @samp{xhippo -f *.ogg}), or @samp{-D}
+to make @code{xhippo} treat command-line arguments as directories to be
+searched for playable files.
+
+@samp{xhippo -h} or @samp{xhippo --help} will give you some simple help
+instructions.
+
+@node GUI, Config file, Invocation, Top
+@comment  node-name,  next,  previous,  up
+@chapter GUI
+
+The status line shows a little information about the player; it shows
+the number of playlist entries upon startup, and what player is being
+used to play the current song (and the PID of the player process, if you
+use @samp{-p} or @samp{showpid:1} in the config file). To start a song,
+click on it in the list, or click "Next" to pick either a random song
+(see the @samp{mustplayall} config file option below to find out how to
+control this), or the next song in the playlist, depending on the
+setting of the "Random" checkbox. Clicking on "Prev" will play the
+previous song (if the "Random" checkbox is enabled, the last random song
+picked). To restart the current song from the beginning, click
+"Restart". To stop, click "Stop".
+
+@code{xhippo} supports a number of keyboard accelerators: @kbd{r} for
+Restart, @kbd{s} or keypad @kbd{/} for Stop, @kbd{p} or keypad @kbd{+}
+for Pause, @kbd{n}, keypad @kbd{*} or keypad @kbd{-} for Next, @kbd{b}
+for Prev, @kbd{`} for Mini, @kbd{h} for Random, @kbd{a} for Add File,
+@kbd{d} for Add Directory, @kbd{l} for Load Playlist, @kbd{v} for Save
+Playlist, @kbd{o} for Sort By Name, @kbd{w} for Sort By Swapped Name,
+@kbd{t} for Sort By Mtime, @kbd{c} for Clear Playlist, @kbd{0} to
+@kbd{9} for user-defined menu entries and @kbd{q} for quit.
+
+When the end of a song is reached, @code{xhippo} will pick either a
+random one or the next one from the list depending on whether the
+"Random" checkbox is set or not. Optionally, @code{xhippo} can scroll
+the list so that the randomly-picked song is at the top of the visible
+section; to enable this, use the @samp{-s} command-line option, or the
+@samp{scroll:1} config-file option below. To quit, use your window
+manager's close button, pick Quit from the pop-up menu or send
+@code{xhippo} a `SIGINT' @kbd{Ctrl-C}.
+
+If you check the "Mini" checkbox, the list of files will disappear,
+making the window smaller; unchecking it will make it reappear. You
+can make @code{xhippo} start up in this "minified" state by using the
+@samp{-t} switch or the @samp{startmini:1} option in your config file.
+
+You can drop `file:' URLs (such as files from your file manager) onto
+the @code{xhippo} window to add songs to the playlist (if you drop a
+directory, it will search the directory for files to add). Other URLs
+(such as `http:') are not supported, as there's no simple mechanism that
+all players understand to stream a file from a network connection.
+
+Right-clicking on the playlist or the status bar will bring up a pop-up
+menu, which allows you to bring up an information window for a song
+showing the song's size, location and the date it was last modified,
+move songs up and down within the playlist, remove songs from the
+playlist, add songs or directories to the playlist, sort the playlist
+by song name, swapped song name (the part after the first @samp{-} in
+the name) or song mtime, load and save playlists, or bring up the
+preferences dialog. The default directory for loading and saving
+playlists is @file{$HOME/.xhippo/playlists}. Left-clicking on the
+status bar will bring up the information window for the song that is
+currently playing.
+
+If you use the @samp{-w} switch or the @samp{savewinstate} config file
+option, @code{xhippo} will save its window position and size to your
+@file{$HOME/.xhippo/winstate} file when you close the window, and will
+reload it on startup.
+
+@node Config file, gtkrc, GUI, Top
+@comment  node-name,  next,  previous,  up
+@chapter Config file
+
+@code{xhippo} searches for its config file as
+@file{/usr/local/etc/xhippo.config} (or wherever you specified with the
+@samp{--prefix} option to @code{configure}), @file{$HOME/.xhippo/config}
+and @file{xhippo.config} (in the current directory); all that are
+present will be read.
+
+Most config-file options have a command-line equivalent; these support
+both traditional (@samp{-x}) and GNU-style long (@samp{--extended})
+options.  The long options have the same name as the config-file
+options; @samp{--option} is equivalent to @samp{option:1} in the config
+file (i.e. it forces the option on). The command-line options override
+the config file. Invoke @code{xhippo} as @samp{xhippo --help} for more
+information.
+
+Many config-file options are alterable from within the GUI at runtime
+through the Preferences dialog, which can be brought up from the
+context menu.
+
+A config file line starting with a @samp{#} will be ignored.
+
+Lines have the format @samp{command:arg1:arg2...}. Arguments can be of
+several types: booleans, integers, strings and sort types. Booleans
+represent on/off conditions; @samp{yes}, @samp{on}, @samp{true} or any non-zero
+integer will enable the attribute, and any other value will disable it.
+For sort types, @samp{none} (or any other unrecognised value) means don't
+sort, @samp{name} (or, for backwards compatibility, any non-zero numeric
+value) means sort by name, @samp{swapped} means sort by swapped name,
+@samp{mtime} means sort by mtime.
+
+The following configuration commands are accepted:
+
+@table @code
+@item type:extension:command[:options]
+When @code{xhippo} encounters a file whose name ends in
+@var{.extension}, it will use @samp{command @var{file}} to play it. The
+extension is case-insensitive. @samp{options} is optional and controls
+how the player will be started by @code{xhippo}; if it contains @samp{g}
+then the player will be started in its own process group (necessary to
+properly kill some multithreaded players); if it contains @samp{i} then
+the player will be started with stdin connected to
+@code{/dev/null}. Examples: @samp{type:mp3:mpg123 -b 1024},
+@samp{type:ogg:ogg123:i}
+
+About the only requirement that @code{xhippo} has on the players that
+it uses is that they must quit cleanly when sent a @code{SIGTERM}, and
+be pauseable with @code{SIGSTOP} and @code{SIGCONT}. Some versions of
+the multithreaded @code{ogg123} have the problem that, when sent a
+@code{SIGTERM}, the main thread exits immediately but the audio device
+isn't closed until the buffer is empty (which could be up to a couple
+of seconds later). This means that @code{xhippo} thinks the player has
+exited before the audio device is available again. This is merely
+annoying if your operating system and hardware permits the audio
+device to be opened by multiple processes at once, but if it doesn't,
+then when a song finishes xhippo will attempt to start the next and
+fail, and do this repeatedly until the audio device is available
+again. One solution is to use another Vorbis player instead of
+@code{ogg123} (such as the somewhat-more-heavyweight @code{mplayer}).
+
+@item autostart:boolean
+If enabled, @code{xhippo} will play a random song on startup. This is
+equivalent to @samp{-a} on the command line.
+
+@item scroll:boolean
+If enabled, @code{xhippo} will scroll the list when a random item is
+selected so that the selected song is visible. This is equivalent to
+@samp{-s} on the command line.
+
+@item mustplayall:boolean
+If enabled, @code{xhippo} will always pick an item that it hasn't played
+before from the playlist when asked to pick a random entry. This
+continues until it has played all the entries, at which point it will
+just pick a random one as before. This is equivalent to @samp{-m} on the
+command line.
+
+@item readid3:boolean
+If enabled, @code{xhippo} will try to read ID3 tags from the files
+listed in the playlists and will use them as the playlist entries if
+found. This slows down @code{xhippo} startup considerably, so it's
+disabled by default. This is equivalent to @samp{-i} on the command
+line.
+
+@item exec:command
+@var{command} will be executed as a shell command (using
+@file{/bin/sh}) before any further config commands are parsed.  For an
+example of why I included this, look at the example config file
+(@file{xhippo.config}).
+
+@item load:playlist
+@var{playlist} will be loaded as a playlist file. This is equivalent to
+including @var{playlist} on the command line.
+
+@item savewinstate:boolean
+If enabled, @code{xhippo} will save its window position, size and state
+(whether it is minified or not) between sessions in the
+@file{$HOME/.xhippo/winstate} file. If it is zero, @code{xhippo} will
+allow your window manager to place it, will start with a "standard"
+(small) size, and won't start minified (unless the next option is
+specified). This is equivalent to @samp{-w} on the command line.
+
+@item startmini:boolean
+If enabled, @code{xhippo} will start up in the "minified" state, as if
+you'd clicked the "Mini" button (even if the winstate file says that the
+window wasn't tinified). This is equivalent to @samp{-t} (for "tiny") on
+the command line.
+
+@item showpid:boolean
+If enabled, @code{xhippo} will show the PID of its player process in the
+status line when not in mini mode. This is equivalent to @samp{-p} on
+the command line.
+
+@item ordered:boolean
+If enabled, @code{xhippo} will start with the "Random" checkbox turned
+off. This is equivalent to @samp{-o} on the command line.
+
+@item stripextension:boolean
+If enabled, @code{xhippo} will strip the extensions from the filenames
+displayed in the playlist. This is equivalent to @samp{-S} on the
+command line.
+
+@item leftscroll:boolean
+If enabled, @code{xhippo} will place the vertical scrollbar on the left
+side of the playlist.  This looks better with NeXTStep-like themes. This
+is equivalent to @samp{-l} on the command line.
+
+@item hideplayeroutput:boolean
+If enabled, @code{xhippo} will redirect the output (stdout and stderr)
+of child player processes to @file{/dev/null}. This is equivalent to
+@samp{-q} on the command line.
+
+@item sortonload:sorttype
+@var{sorttype} specifies how @code{xhippo} should sort playlists when
+they are loaded. @samp{-O} on the command line is equivalent to
+@samp{sortonload:name}.
+
+@item playlistdir:dir
+Use @var{dir} as the default directory for loading or saving playlists.
+
+@item demanglenames:boolean
+If enabled, @code{xhippo} will replace @samp{_} (underscores) and
+@samp{%20}s in song names with spaces on the display. This is equivalent
+to @samp{-d} on the command line.
+
+@item onetime:boolean
+If enabled and either @samp{ordered} or @samp{mustplayall} are turned
+on, @code{xhippo} will stop when all the items in the playlist have been
+played. This is equivalent to @samp{-1} on the command line.
+
+@item playlisttitle:boolean
+If enabled, then @code{xhippo} will set the window title to include the
+name of the current playlist. This is equivalent to @samp{-T} on the
+command line.
+
+@item titlebasename:boolean
+If enabled, then @code{xhippo} will use the basename of the playlist
+name when setting the window title if @samp{playlisttitle} is set. This
+is equivalent to @samp{-b} on the command line.
+
+@item nocheckfiles:boolean
+Normally, when a playlist is loaded, @code{xhippo} will check to see
+whether all the listed files exist and discard them if they don't.  If
+enabled, then @code{xhippo} won't bother checking, which will make
+startup significantly faster on large playlists. This is equivalent to
+@samp{-c} on the command line.  Note that @code{xhippo} will read the
+information if it's needed at a later time, so if you sort the playlist
+by mtime then it'll need to scan all the files to get the mtimes.
+
+@item writeplaying:boolean
+If enabled, then @code{xhippo} will write the name of the song that is
+currently playing to @file{$HOME/.xhippo/current_song}. (If the file
+cannot be written, @code{xhippo} will silently ignore it.) This is
+equivalent to @samp{-W} on the command line.
+
+@item skippath:integer
+Normally when displaying song names in the playlist, @code{xhippo} will
+use the basename of the file (i.e. it will strip off the path to the
+file). If @var{integer} is set to something other than zero,
+@code{xhippo} will only strip the first @var{integer} elements of the
+path; this could be useful if you sort your music collection into albums
+and want to display the album names in the playlist. This is equivalent
+to @samp{-k @var{integer}} on the command line.
+
+@item usercommand:description:command
+Define a user command. This will add an entry titled @var{description}
+to the context menu (and assign it a numerical accelerator starting from
+`0'); when the entry is picked, @var{command} will be run (with a single
+instance of @samp{%s} in the command replaced by the full filename of
+the selected song, or the empty string if the menu is invoked while not
+over a song).
+
+@item commandlinesongs:boolean
+If enabled, @code{xhippo} will treat command-line arguments as songs to
+add to the playlist rather than playlists to load. This is equivalent to
+@samp{-f} on the command line; you can therefore do something like
+@samp{xhippo -f *.ogg} to start @code{xhippo} listing all the `.ogg'
+files in the current directory.
+
+@item commandlinedirs:boolean
+If enabled, @code{xhippo} will treat command-line arguments as
+directories to search for songs to add to the playlist.  This is
+equivalent to @samp{-D} on the command line.
+
+@item deletewhenplayed:boolean
+If enabled, @code{xhippo} will remove songs from the playlist once they
+have been played. This is equivalent to @samp{-x} on the command line.
+
+@item persistplaylist:boolean
+If enabled, @code{xhippo} will attempt to load a playlist from
+@file{$HOME/.xhippo/saved_playlist} on startup (if no other files are
+given on the command line), and will save the current playlist to that
+file on exit. This is equivalent to @samp{-P} on the command line.
+
+@item commandlineguess:boolean
+If enabled, @code{xhippo} will attempt to guess what the command-line
+arguments are. If they have a known extension (one specified with
+@samp{type} above) then they are assumed to be songs; if they are
+directories they are assumed to be directories; otherwise they are
+assumed to be playlists. You probably want this turned on unless you're
+in the habit of calling your playlist @samp{playlist.ogg}. This is
+equivalent to @samp{-g} on the command line.
+
+@item persistfrequently:boolean
+If enabled and @samp{persistplaylist} is also enabled, @code{xhippo}
+will save the current playlist whenever a new song is started. You may
+want this if you're in the habit of killing xhippo randomly.
+
+@end table
+
+@node gtkrc, Distribution, Config file, Top
+@comment  node-name,  next,  previous,  up
+@chapter gtkrc
+
+To allow for customised GTK appearances, @code{xhippo} reads a standard
+gtkrc file in @file{$HOME/.xhippo/gtkrc}. For more information about gtkrc
+files, consult the GTK documentation.
+
+@node Distribution, Contact, gtkrc, Top
+@comment  node-name,  next,  previous,  up
+@chapter Distribution
+
+If you want an archive to give to somebody else, invoke @samp{make
+dist} in the @code{xhippo} source directory. This will produce the
+same @file{xhippo-VERSION.tar.gz} file that I distribute. If you wish
+to mail me a modified version, do exactly the same (after removing the
+@file{doc} directory); I can then @code{diff} it against my last
+release to see what you've changed. (Alternately, just send me a
+@samp{diff -Naur} between a clean distributed @code{xhippo} and your
+modified version.)
+
+@node Contact,  , Distribution, Top
+@comment  node-name,  next,  previous,  up
+@chapter Contact
+
+@code{xhippo} is far from perfect. Please contact
+@email{bug-xhippo@@gnu.org} if you discover any bugs, or have any
+suggestions.
+
+@code{xhippo} was written by me, Adam Sampson, @email{ats@@offog.org}.  My
+other software can always be found at
+@url{http://offog.org/}; @code{xhippo} is now a GNU
+(@url{http://www.gnu.org/}) application and is distributed from
+@url{ftp://ftp.gnu.org/} or from mirror sites.
+
+The original German translation was done by Volker Assmann,
+@email{volka@@bigfoot.de}, who was also responsible for betatesting.
+
+Hubert Feyrer first alerted me to the problems with GTK+-1.0 and 1.1
+compatibility, and created the NetBSD package. Rod Taylor created the
+FreeBSD port, and Kevin Lo created the OpenBSD port.
+
+Craig Knudsen provided a routine to read ID3 tags.
+
+Joseph Turian suggested the idea of file inclusion in playlists.
+
+Jeff Covey supplied a Perl script which provided the functionality of
+the current "Load" button, which encouraged me build the feature in.
+
+Kevin Everets implemented the Pause button, the leftscroll option,
+translated the documentation to texinfo and provided patches for or
+suggested various other features.
+
+Several other people who contributed are credited in the
+@file{ChangeLog} file.
+
+(2021 note)
+
+This version is maintained by Fredrick R. Brennan. @email{copypaste@@kittens.ph}
+
+@contents
+@bye

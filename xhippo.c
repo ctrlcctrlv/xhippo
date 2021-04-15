@@ -39,9 +39,7 @@ GtkWidget *window, *restartbutton, *stopbutton, *buttons_box,
   *scrollbar, *upbutton, *downbutton, *deletebutton, *popupmenu,
   *up_item, *down_item, *delete_item, *info_item, *eventbox,
   *prefs_window = NULL, *prefs_all_box;
-#ifdef USEGTK2
 GtkListStore *filestore;
-#endif
 GtkAdjustment *vadj;
 GtkAccelGroup *accel_group;
 int sigchld_pipe[2];
@@ -236,11 +234,9 @@ int main(int argc, char **argv) {
   gtk_window_set_title(GTK_WINDOW(window), wintitlestring);
 #endif
 
-#ifndef USEGTK2
   /* With GTK1, mini mode only works when shrinking is enabled. With
      GTK2, it only works when shrinking is disabled. Go figure. */
   gtk_window_set_policy(GTK_WINDOW(window), TRUE, TRUE, TRUE);
-#endif
 
   gtk_signal_connect(GTK_OBJECT(window), "destroy",
 		     GTK_SIGNAL_FUNC(handle_destroy), NULL);
@@ -274,9 +270,7 @@ int main(int argc, char **argv) {
 
   /* Create the status bar. */
   statusbar = gtk_statusbar_new();
-#ifdef USEGTK2
   gtk_statusbar_set_has_resize_grip(GTK_STATUSBAR(statusbar), FALSE);
-#endif
   gtk_container_add (GTK_CONTAINER(eventbox), statusbar);
   contextid = gtk_statusbar_get_context_id(GTK_STATUSBAR(statusbar), "xhippo");
   gtk_statusbar_push(GTK_STATUSBAR(statusbar), contextid,
@@ -591,7 +585,6 @@ int main(int argc, char **argv) {
 
   /* Create the list. We have to do this after we've read the options,
      because we need to know the state of mode_left_scroll. */
-#ifndef USEGTK2
   filelist = gtk_clist_new(1);
 
   gtk_clist_set_selection_mode(GTK_CLIST(filelist), GTK_SELECTION_SINGLE);
@@ -601,47 +594,12 @@ int main(int argc, char **argv) {
 
   gtk_signal_connect(GTK_OBJECT(filelist), "button_press_event",
   		     GTK_SIGNAL_FUNC(handle_button_press), NULL);
-#else
-  {
-    GtkTreeViewColumn *column;
-    GtkCellRenderer *renderer;
-    GtkTreeSelection *select;
-
-    filestore = gtk_list_store_new(NUM_COLUMNS,
-				   G_TYPE_POINTER,
-				   G_TYPE_STRING);
-    filelist = gtk_tree_view_new_with_model(GTK_TREE_MODEL(filestore));
-    g_object_unref(G_OBJECT(filestore));
-
-    gtk_tree_view_set_headers_visible(GTK_TREE_VIEW(filelist), FALSE);
-    
-    renderer = gtk_cell_renderer_text_new();
-    column = gtk_tree_view_column_new_with_attributes("Title", renderer,
-						      "text", TITLE_COLUMN,
-						      NULL);
-    gtk_tree_view_column_set_sizing(column, GTK_TREE_VIEW_COLUMN_FIXED);
-    gtk_tree_view_append_column(GTK_TREE_VIEW(filelist), column);
-
-    select = gtk_tree_view_get_selection(GTK_TREE_VIEW(filelist));
-    gtk_tree_selection_set_mode(select, GTK_SELECTION_SINGLE);
-    g_signal_connect(G_OBJECT(filelist), "button_press_event",
-		     G_CALLBACK(handle_button_press), NULL);
-  }
-
-  /* Since we add lots of items to the file list, we don't want it
-     requesting a really really tall size for itself. */
-  gtk_widget_set_size_request(GTK_WIDGET(filelist), -1, 0);
-#endif
 
   gtk_widget_set_name(filelist, "filelist");
 
   vadj = (GtkAdjustment *)gtk_adjustment_new(0, 0, 0, 0, 0, 0);
-#ifdef USEGTK2
   gtk_tree_view_set_vadjustment(GTK_TREE_VIEW(filelist),
 				GTK_ADJUSTMENT(vadj));
-#else
-  gtk_clist_set_vadjustment(GTK_CLIST(filelist), GTK_ADJUSTMENT(vadj));
-#endif
   scrollbar = gtk_vscrollbar_new(GTK_ADJUSTMENT(vadj));
 
   if (mode_left_scroll) { 
@@ -694,11 +652,7 @@ int main(int argc, char **argv) {
   gtk_widget_show(all_box);
 
   /* Attach the acceleration group to the window. */
-#ifdef USEGTK2
   gtk_window_add_accel_group(GTK_WINDOW(window), accel_group);
-#else
-  gtk_accel_group_attach(accel_group, GTK_OBJECT(window));
-#endif
 
   /* Read the config file for the second time. */
   read_config_files(1);
@@ -711,15 +665,9 @@ int main(int argc, char **argv) {
   if (mode_save_window_pos) {
     read_window_state();
 
-#ifdef USEGTK2
     gtk_window_move(GTK_WINDOW(window), attribute_xpos, attribute_ypos);
     if (attribute_width && attribute_height)
       gtk_window_resize(GTK_WINDOW(window), attribute_width, attribute_height);
-#else
-    gtk_widget_set_uposition(window, attribute_xpos, attribute_ypos);
-    if (attribute_width && attribute_height)
-      gtk_widget_set_usize(window, attribute_width, attribute_height);
-#endif
   }
 
   /* Set the window attributes and show it. */

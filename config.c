@@ -417,11 +417,7 @@ void show_prefs_window() {
 
   if (prefs_window) return;
 
-#ifdef USEGTK2
   prefs_window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
-#else
-  prefs_window = gtk_window_new(GTK_WINDOW_DIALOG);
-#endif
   gtk_window_set_title(GTK_WINDOW(prefs_window), _("Preferences"));
   gtk_signal_connect(GTK_OBJECT(prefs_window), "delete_event",
 		     GTK_SIGNAL_FUNC(handle_prefs_delete_event), NULL);
