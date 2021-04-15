@@ -1,0 +1,9 @@
+Ideas for xhippo
+
+* Look for the different players and generate xhippo.config
+  automatically depending on what's available.
+* Options menu and dialog
+* Abstracted-out interface support (GTK, GNOME, ncurses, WINGs...)
+* Music preference management ("I don't like this song *that* much...")
+* "Copy the name of this song" (to selection)
+* Sort without "the"

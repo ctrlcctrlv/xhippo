@@ -1,0 +1,9 @@
+2007-08-21  gettextize  <bug-gnu-gettext@gnu.org>
+
+	* Makefile.in.in: Upgrade to gettext-0.14.5.
+	* Rules-quot: Upgrade to gettext-0.14.5.
+
+2003-02-02  Adam Sampson  <azz@gnu.org>
+
+	* de.po: Updated for new gettext.
+

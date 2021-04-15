@@ -1,0 +1,1027 @@
+2007-08-27  Adam Sampson  <ats@offog.org>
+
+	* everything: Put xhippo into Darcs.
+	
+	* config.c: Rename "bool" to avoid future C99 problems.
+	
+	* doc/Makefile.am: Use automake to build and install the
+	documentation.
+
+	* everything: Update license to GNU GPL version 3.
+	
+	* configure.in: Changed version to 3.5 -- hopefully this should be
+	the last release in the xhippo 3 series.
+
+2007-08-21  Adam Sampson  <ats@offog.org>
+
+	* playlist.c: Remove ID3lib support.
+
+	* callbacks.c: Fix some compiler warnings.
+
+2007-08-21  gettextize  <bug-gnu-gettext@gnu.org>
+
+	* configure.in (AM_GNU_GETTEXT_VERSION): Bump to 0.14.5.
+
+2003-05-16  Adam Sampson  <azz@us-lot.org>
+
+	* everything: Put xhippo into CVS.
+	
+	* callbacks.c: Lots of changes for how events are handled; fixed
+	bugs reported by Matthew Slowe (list position not set correctly if
+	you started in mini mode then switched out), and me (if your first
+	song choice was a non-initially-visible file, a different song
+	would play, due to spurious "changed" events).
+
+2003-02-02  Adam Sampson  <azz@gnu.org>
+
+	* config.c: (and others) Added some extra const declarations for
+	clean builds with --disable-nls.
+
+	* xhippo.h: Added a MacOS X-specific kludge to always use
+	_INTL_REDIRECT_MACROS. Removed the hardcoded ENABLE_NLS, so that
+	--disable-nls should now work too.
+
+	* configure.in: Move to libogg-style I18N_CFLAGS etc., so that
+	libintl stuff works on systems with no native libintl.
+
+	* xhippo.h: Upgraded gettext (the previous version was broken with
+	--with-included-gettext, and it's needed on MacOS X). Changed to
+	use gettext.h instead of libintl.h, so that --disable-nls
+	works.
+
+	* Makefile.am: Added xhippo.config back to EXTRA_DIST, else it
+	doesn't actually get distributed. Oops. Added gettext.h to
+	sources.
+
+	* xhippo.config: Add type entry for Speex files. Add example .mp3
+	type entry to use madplay (which is free software, and faster than
+	mpg123). Change default .wav type entry to use "play" from sox.
+	Add type entry for .it. Change default type entries for various
+	video formats to use MPlayer instead of xanim (and add a couple of
+	new ones). Add an example .ogg entry using MPlayer.
+
+2003-01-31  Adam Sampson  <azz@gnu.org>
+
+	* Makefile.am:  Moved xhippo.config into sysconf_DATA, and removed
+	config.h from EXTRA_DIST. This means xhippo.config should get
+	installed now.
+
+2003-01-30  Adam Sampson  <azz@gnu.org>
+
+	* xhippo.c: Made update_window() only scroll the list if it's
+	realized, since if you're starting in mini mode it might not be.
+
+	* callbacks.c: Remove GNOME drag-and-drop parsing, and fix up our
+	own to deal with the three different formats for file: URIs
+	correctly.
+
+2003-01-29  Adam Sampson  <azz@gnu.org>
+
+	* Makefile.am: Stop distributing contrib, since it's horribly
+	out-of-date.
+
+	* configure.in: Changed to use a config.h file instead of the
+	screenful of -Ds it currently generates.
+
+	* callbacks.c: Removed window delete handlers which did nothing.
+	Added handle_menu_quit and handle_menu_prefs as proper menu
+	callbacks.
+
+	* xhippo.c: Ported to use GtkTreeView instead of GtkCList. The
+	code will be much cleaner once the GTK1 stuff is gone, but it's
+	still quite a lot larger than it used to be.
+
+	Fixed the bug where with GTK 2.2 clicks on the list don't work --
+	handle_menu_popup wasn't declared to return a value. Fixed all the
+	other signal handler types too (handle_menu_user only ever worked
+	by luck!).
+
+2002-08-27  Adam Sampson  <azz@gnu.org>
+
+	* xhippo.c: Removed gtk_window_set_policy call that caused
+	set_mini() not to work with GTK2 (but is required for GTK1).
+	Noticed what might be a bug: if you switch to mini mode, then move
+	the window, then quit, the new position won't be remembered, since
+	handle_configure ignored the configure event. Fixed this. Fixed
+	GTK2 bug where window would resize itself to fit the number of
+	items in the list by adding gtk_widget_set_size_request call on
+	filelist.
+
+	* callbacks.c: Made handle_configure return FALSE (rather than
+	being void). The rest of the handle_xxx callbacks probably need
+	similar treatment (checking them against the API
+	documentation). This makes resizing work with GTK2. Changed the
+	window size management functions to the GtkWindow ones for GTK2 as
+	well. Mini is still broken.
+
+	* xhippo.c (among others): various changes to get xhippo to work
+	with GTK2. I'm keeping GTK1 support for now, since it's quite a
+	bit less bloaty and the changes are fairly minimal. Two obvious
+	problems noted: the status bar now has an unpleasant Windows-style
+	resize triangle (fixed), and filenames which aren't UTF-8 make the
+	list complain while rendering. Window resizing is also broken
+	(which breaks Mini too). Appears otherwise to work.
+
+2002-08-21  Adam Sampson  <azz@gnu.org>
+
+	* playlist.c: Ported to libid3tag (from mad), since id3lib doesn't
+	seem to support C properly any more. (The id3lib configure check
+	will fail with newer id3lib, so we shouldn't need to remove the
+	old code.)
+
+2002-05-27  Adam Sampson  <azz@gnu.org>
+
+	* xhippo.c: Added call to set up configuration command list.
+	Removed "p" accelerator for config window, since it clashes with
+	"Pause". Removed GNOME menus support (since it merely duplicates
+	some of the entries in the pop-up menu).
+
+	* config.c: Added dynamic configuration command list (to support
+	localisation of prefs dialog).
+
+	* playlist.c: Added missing "All items played" message when
+	reaching the end of a playlist in sequential mode.
+
+2001-12-30  Adam Sampson  <azz@gnu.org>
+
+	* config.c (among others): Added initial preferences window
+	support; currently it only shows the CT_BOOL preferences, and
+	(more annoyingly) there's no localisation, since the
+	configcommands array isn't built at runtime.
+
+2001-12-27  Adam Sampson  <azz@gnu.org>
+
+	* playlist.c: Added playing = 0 to avoid crash when the player has
+	already died and we're still playing but a filetype isn't
+	recognised, so last_action is NULL when we update the status
+	display (reported by Matthew Slowe). This does, however, change
+	the old behaviour, since xhippo now stops when it encounters an
+	unrecognised filetype rather than continuing; this should probably
+	be a config option.
+
+2001-12-11  Adam Sampson  <azz@gnu.org>
+
+	* config.c: Added titles for config items.
+
+2001-09-10  Adam Sampson  <azz@gnu.org>
+
+	* configure.in: Made the GTK check look for 1.2.0 or
+	better. (Reported by Matthew Slowe.)
+
+2001-08-25  Adam Sampson  <azz@gnu.org>
+
+	* configure.in: Changed GNOME detection code to use `` rather than
+	$(), since Solaris sh doesn't do $(). (Reported by Michael
+	Ritzert.)
+
+	* Makefile.am: Removed CFLAGS definition. Added man_MANS so that
+	the manpage gets installed. (Reported by Michael Ritzert.)
+
+2001-08-17  Adam Sampson  <azz@gnu.org>
+
+	* xhippo.config: Added a sidplay entry (reported by Eric
+	W. Brown).
+
+	* configure.in: Changed version to 3.3.
+	
+2001-06-27  Adam Sampson  <azz@gnu.org>
+
+	* playlist.c: Added mode_persist_frequently. Made persistent
+	playlist loading use the cwd as the dirname. Made add_file prepend
+	the cwd if the filename is relative (request by Martin Ward).
+
+	* xhippo.c: Moved the gettext setup stuff to before the first time
+	it's used.
+
+	* playlist.c: Made nullinput not depend on
+	mode_hide_player_output. Completely reworked the child process
+	handling: it now uses pipes to synchronise with the child process
+	before it execs (since with gcc3 I was finding that if the child
+	died immediately the "childpid = fork()" wouldn't yet have
+	completed in the parent), and it uses a self-pipe to handle
+	SIGCHLD (since once I fixed the first bug it was hanging inside
+	GTK---I assume the GTK timeout registration function is thread
+	unsafe, unlike the Motif one). Finally got rid of donotstopflag.
+
+2001-06-26  Adam Sampson  <azz@gnu.org>
+
+	* xhippo.config: Added the i option to the ogg type.
+
+	* callbacks.c: Moved the save_window_state call into
+	handle_destroy, since it wasn't getting called if you quit from
+	the menu (bug reported by Martin Ward).
+
+	* config.c: Removed last_player in favour of last_action. Added
+	setgroup and nullinput options to fileaction. Added FUNCTION23
+	config type and made add_file_action look for options in its third
+	argument (features suggested by Martin Ward).
+
+2001-06-09  Adam Sampson  <azz@gnu.org>
+
+	* playlist.c: Changed setpgrp() to setpgid(0, 0) because the
+	modern BSD setpgrp takes different arguments, and setpgid is
+	POSIX (bug reported by Kevin Lo).
+
+2001-06-06  Adam Sampson  <azz@gnu.org>
+
+	* xhippo.c: Added mode_delete_when_played and
+	mode_persist_playlist (both suggested by Martin Ward).
+
+	* playlist.c: Factored out delete_row and modified it so it'll
+	decrement last_played even if it points to the row we're deleting.
+	Factored out write_playlist.
+	
+	* callbacks.c: Fix a logic bug in handle_menu_delete -- the
+	->previous scan was only done when last_played was decremented,
+	which was wrong. Made handle_save_ok close the file requester even
+	if the playlist couldn't be saved.
+
+	* xhippo.h: Made add_directory be defined even if we don't have
+	NFTW (bug reported and patched by Kevin Lo <kevlo@openbsd.org>).
+
+2001-05-24  Adam Sampson  <azz@gnu.org>
+
+	* TODO: Cleaned up (since it hadn't been updated since 1.9;
+	reported by Kevin Everets).
+
+	* README: Removed references to sgmltools (reported by Kevin
+	Everets).
+
+2001-05-16  Adam Sampson  <azz@gnu.org>
+
+	* callbacks.c: Added handle_eventbox_click and made it pop up the
+	song info window for the current song when the eventbox is
+	left-clicked. Split out popup_songinfo_window.
+
+	* playlist.c: Added a call to setpgrp() in the forked process, and
+	made the kill signals go to all processes in the process group;
+	this is necessary for some players (patch by Kevin Everets).
+
+	* doc: Merged Kevin Everets' texinfo version of the manual.
+
+	* configure.in: Changed version to 3.2.
+	
+2001-04-30  Adam Sampson  <azz@gnu.org>
+
+	* configure.in: Updated for gettext.
+
+	* po/de.po: Moved German locale out into a .po file.
+
+	* xhippo.c: Split up multiline strings.
+
+	* Makefile.am (dist-hook): Modified to reformat the documents
+	before distribution.
+
+	* po/xhippo.pot: Added gettext support.
+
+	* xhippo.h: Modified to use gettext (patch from Kevin Everets).
+
+2001-04-29  Adam Sampson  <azz@gnu.org>
+
+	* xhippo.h: Added previous to songinfo.
+
+	* callbacks.c: Made handle_menu_delete fix songinfo->previous
+	entries.
+
+	* xhippo.c: Added various accelerators (based on patch by Kevin
+	Everets). Added Quit to menu (Kevin Everets). Added Prev button.
+
+	* xhippo.config (writeplaying): Added commandlinefiles and
+	commandlinedirs.
+
+	* config.c: Added mode_commandline_dirs. Increased default size to
+	325x325 (Kevin Everets).
+
+	* playlist.c: Added support for adding directories recursively
+	(suggestion by Martin Ward). Abstracted out get_action. Changed
+	the random function to the one suggested by the GNU rand() manual
+	page. Added pick_prev.
+
+2001-04-16  Adam Sampson  <azz@gnu.org>
+
+	* playlist.c: Added id3lib support.
+
+	* Makefile.am (xhippo_LDADD): Added ID3LIBS.
+
+	* xhippo.h: Added id3.h include.
+
+	* configure.in: Added test for libid3.
+
+2001-04-12  Adam Sampson  <azz@gnu.org>
+
+	* xhippo.config: Updated for new option types.
+
+	* config.c: Added support for sorttypes in the config file. Made
+	mode_sort_on_load into a sorttype. Added support for boolean
+	values.
+
+	* playlist.c: Added sorting by swapped name. Added support for
+	sorting automatically by things other than name.
+
+2001-04-07  Adam Sampson  <azz@gnu.org>
+
+	* callbacks.c: Fixed title on Add Song dialog (bug reported by
+	David Dorward).
+
+2001-03-28  Adam Sampson  <azz@gnu.org>
+
+	* callbacks.c: Made handle_menu_delete() either stop playing or
+	adjust the current song number (bug reported by Giles Radford).
+
+	* playlist.c: Made clear_playlist() stop playing.
+
+2001-03-27  Adam Sampson  <azz@gnu.org>
+
+	* callbacks.c: Made handle_list_click more general and renamed it
+	to handle_menu_popup.
+
+	* config.c: Added mode_commandline_songs (at the request of
+	Matthew Slowe).
+
+	* xhippo.c: Made clicks on the status bar invoke the context menu
+	handler (at the request of David Dorward); this entailed adding an
+	event box for the status bar. Added mode_commandline_songs.
+
+	* configure.in: Changed version to 3.1.
+
+2001-03-25  Adam Sampson  <azz@gnu.org>
+
+	* config.c: Made the default width and height 300, so that if you
+	start xhippo up for the first time with a massive playlist it
+	won't size the window to fit it (bug reported by David Dorward).
+
+	* callbacks.c: Fixed handle_menu_user so it doesn't segfault if
+	nothing's selected. (I considered making xhippo disable user menu
+	items if nothing's selected, but that removes their usefulness for
+	starting external programs...)
+
+	* xhippo.h: Moved lots of stuff into xhippo.h and added
+	prototypes.
+
+	* xhippo.c: Added -Wmissing-prototypes -Wstrict-prototypes to
+	Makefile.am to stop me forgetting prototypes in the future. Moved
+	lots of stuff out to other files. Fixed the type of
+	handle_sigchld.  Made main automatically assign accelerators to
+	user commands (starting from 1, so they fit sensibly on to the
+	keyboard).
+
+	* xhippo.c: Made set_mini preserve the width of the window when
+	going into mini mode. Celebrated the change to BST. Made set_mini
+	call gtk_adjustment_changed so that the list scrolls correctly if
+	the adjustment changes while it's hidden.
+
+2001-03-24  Adam Sampson  <azz@gnu.org>
+
+	* xhippo.c: Moved the status-bar update and list-scrolling code
+	out into update_window(), so that it can be updated when we flip
+	in and out of mini mode and when we unpause a song it will show
+	the player again, and thus removed STRRESUMEPLAY (this being
+	loosely at the request of Matthew Slowe). Cleaned up the code in
+	start_playing that generates the arguments. Made scroll_catchup
+	ensure that the row is completely visible.
+
+2001-03-23  Adam Sampson  <azz@gnu.org>
+
+	* configure.in: Changed version to 3.0.
+
+	* xhippo.c: Replace the file type arrays with a linked list of
+	struct _fileactions. Replaced STRBUFSIZE - 1 with STRBUFSIZE (and
+	similar) in fgets and snprintf calls. Made the config file reader
+	table-driven. Renamed a number of functions to have more
+	underscores in their names. Removed the horrid evil ugly
+	"Obfuscation Junkie" code in favour of strchr while moving the
+	"execute configuration command" code out to a separate
+	function. Removed strbuf. Added user menu items (at the request of
+	Giles Radford). Removed pointless check for fileness in
+	read_playlist. Changed wait(NULL) in handle_sigchld to waitpid
+	with WNOHANG specified, so we don't deadlock waiting if no child
+	has exited (this avoids the occasional deadlock when players die
+	immediately). Replaced a few deeply-nested ifs with
+	returns. Abstracted out the arguments list string into a variable
+	(so we don't have three copies of it, oops). Implemented
+	mode_skip_path (patch provided by Jeff Weisberg). Fixed the GNOME
+	About dialog's copyright statement.
+
+	* xhippo.h: Ripped out MAXFILETYPES.
+
+	* xhippo.config: Added an example usercommand.
+
+2001-02-11  Adam Sampson  <azz@gnu.org>
+
+	* xhippo.c: Added accelerators s, r, n, and p (requested by
+	Matthew Slowe).
+
+2000-12-24  Adam Sampson  <azz@gnu.org>
+
+	* xhippo.c: Made sortplaylist take a function argument and added
+	sort_compare_mtime. Added a menu entry for "sort by mtime".
+
+	* xhippo.c: Added read_song_info and sinfo->inforead to guarantee
+	that we always have the songinfo fields that come from stat even
+	if mode_no_check_files is on. Made sortplaylist and
+	handle_menu_info read the information if required.
+
+2000-12-14  Adam Sampson  <azz@gnu.org>
+
+	* xhippo.c: Updated copyright notice to match GNU standards.
+
+2000-12-11  Adam Sampson  <azz@gnu.org>
+
+	* configure.in: Changed version number to 2.9.
+	
+	* xhippo.c: Reworked signal-handling stuff to make it more
+	understandable and to remove race conditions when a signal arrives
+	in the middle of a GTK operation.
+
+2000-11-30  Adam Sampson  <azz@gnu.org>
+
+	* xhippo.c: Added an option to write the display_name of the
+	currently-playing song to ~/.xhippo/current_song (suggested by Ben
+	Clay Charlton).
+
+	* xhippo.c: Added an option to not bother stat()ing all the files
+	in the playlist; this speeds up startup at the cost of
+	robustness.
+
+	* xhippo.c: Added support for setting the window title based on
+	the name of the playlist (suggested by <zork@lordzork.com>).
+
+	* xhippo.c: Changed exit(20) to _exit(20) if execvp fails.
+
+	* xhippo.c: Added --help for "ordered".
+
+	* xhippo.c (SCANS): Tidied up SCANS to make it readable.
+
+2000-11-25  Adam Sampson  <azz@gnu.org>
+
+	* xhippo.c: Made Mini mode use the display_name rather than the
+	basename of the song in the status bar when playing.
+
+2000-11-20  Adam Sampson  <azz@gnu.org>
+
+	* xhippo.h (STRSETHOME): Merged in Markus's updated German locale,
+	on the grounds that Kevin Everets said that he's got some more
+	patches to come in his Advogato diary today.
+
+2000-09-16  Adam Sampson  <azz@gnu.org>
+
+	* configure.in: Changed version to 2.8.
+
+	* xhippo.c: Merged Ken Arromdee's onetime patch.
+
+2000-09-07  Adam Sampson  <azz@gnu.org>
+
+	* xhippo.c: Added size and mtime to the songinfo structure.
+	Added info window support.
+
+2000-09-05  Adam Sampson  <azz@gnu.org>
+
+	* xhippo.c: Fixed GNOME support. (Reported by Jason Buberel,
+	jason@buberel.org.)
+
+	* xhippo.c: Made the config file reader make two passes through
+	the file, so that it can be read both before and after the GUI is
+	shown. This makes exec/load/exec work again. (Reported by Pierre
+	Ganty.)
+
+	* xhippo.c: Added a check for too many filetypes in the config
+	file reader.
+
+	* xhippo.c: A number of changes from and inspired by Kevin
+	Everets: added name demangling, fixed relative path handling in
+	playlists, set last_played to -1 in clearplaylist(), added
+	accelerator keys for the popup menu.
+
+	* configure.in: Changed version to 2.7.
+
+2000-08-14  Adam Sampson  <azz@gnu.org>
+
+	* xhippo.c: Made last_played start at -1, and made start_playing
+	check that it's valid. This stops a crash when Restart is hit with
+	an empty playlist, and also means that hitting Next when you
+	haven't yet played anything will play the first song rather than
+	the second. (Reported by Kevin Everets.)
+
+	* xhippo.c: Renamed make_button to add_button, and made
+	add_menu_item return the item it added.
+
+	* xhippo.c: Changed the logic in handle_list_click so that the
+	menu will be shown even if the click isn't over a valid item, and
+	the items in the menu will be disabled. That way, you can add
+	items to an empty playlist, and you can't select options that
+	require an item when you don't have any. (Reported by Kevin Everets.)
+	
+	* xhippo.c: Got rid of the explicit clearing of the settings in
+	main in favour of initialisers.
+
+	* xhippo.c: Added a get_playlist_dir function that finds an
+	appropriate playlist directory, checking the playlistdir config
+	file option first. (Requested by Kevin Everets.)
+
+	* xhippo.c: Added a check in main.c that the user has set $HOME.
+
+	* contrib: Removed README~. Oops.
+
+	* doc/screenshot.jpeg: Took a new screenshot.
+	
+	* configure.in: Buffer Overflow Day. Added a check for snprintf,
+	and an emulation macro at the top of xhippo.c if we don't have
+	it. Turned all sprintf calls into snprintf calls.
+
+	* configure.in: Changed the version number to 2.6.
+
+2000-08-12  Adam Sampson  <azz@gnu.org>
+
+	* xhippo.c: Moved all playlist manipulation commands on to the
+	popup menu. Added "Clear Playlist".
+
+	* xhippo.c: Fixed playlist reading again (this time it was reading
+	the last entry twice, which sort of makes up for the previous
+	version where it didn't read the last line at all!). It's even
+	tidier now.
+
+	* xhippo.c: Added a non-GNOME drop handler (you can now drop URIs
+	from xftree into xhippo without needing GNOME installed).
+
+	* xhippo.c: Implemented sorting (using qsort). Implemented
+	playlist saving. Added -O to make xhippo sort the playlist once
+	it's loaded.
+	
+2000-08-11  Adam Sampson  <azz@gnu.org>
+
+	* xhippo.c: Moved the code to clear the playlist out into a
+	seperate function. Moved the code to create buttons out into a new
+	function. Added the code to create and display the popup
+	menu. (I'm _not_ looking forward to documenting this.) Renamed a
+	few functions to have more sensible names.
+
+	* xhippo.c: Implemented move up, move down and delete on the popup
+	menu.
+
+	* xhippo.c: Added mode_hide_player_output based on Kevin Everets'
+	implementation.
+
+	* configure.in: Changed the version number to 2.5.
+	
+2000-07-24  Adam Sampson  <azz@gnu.org>
+
+	* xhippo.c: Removed randomtab and the second column in the list in
+	favour of a songinfo structure which is allocated for each
+	row. This can hold more information, and has the advantage that we
+	can declare a destructor for it, meaning that we can more easily
+	keep track of how many items are in the list.
+
+	* xhippo.c: Made mode_scroll_catchup work again (somehow I doubt
+	anybody runs with it turned off any more...).
+
+	* xhippo.c: Applied patch from Kevin Everets to add a "leftscroll"
+	option to place the scrollbar on the left side of the
+	window. Unfortunately, there doesn't appear to be a way of finding
+	out from the theme which side the scrollbar should go...
+
+	* xhippo.c: Removed the memory leak in my implementation of
+	strcasecmp. (Ahem, not sure how I missed that one originally...)
+
+	* xhippo.c: Made start_playing explicitly set paused = 0.
+
+	* xhippo.c: Moved the code back out of create_list_widget, as it
+	only gets called once.
+
+	* xhippo.c: Fixed the bug I introduced with the read_playlist
+	cleanup which meant that the last file in the playlist was never
+	read.
+
+2000-07-23  Adam Sampson  <azz@gnu.org>
+
+	* xhippo.c: Fixed the case where hitting OK in the file requester
+	with no file selected would cause a crash. (The name of the
+	directory was getting passed to readplaylist; it now checks the
+	file type.)
+
+	* configure.in: Changed the version number to 2.4.
+
+2000-07-22  Adam Sampson  <azz@gnu.org>
+
+	* xhippo.config: Updated the config file to include stripextension
+	and to correct the comment for startmini.
+
+	* xhippo.c: Replaced the scrollbox widget with a seperate
+	scrollbar and adjustment for the list view; this makes large
+	playlists work correctly, and makes the scrolling more accurate.
+	The example in the GTK tutorial uses a scrolled window, but this
+	method works much better.
+
+	* xhippo.c: Added mode_strip_extension.
+
+	* xhippo.c: Stripped out all the sizeof(gchar)
+	references. sizeof(gchar) is always 1; that's the point! (Things
+	are going to need to change considerably if xhippo ever gets
+	unicode support.)
+
+	* xhippo.c: Just clear the list when loading a new playlist,
+	rather than destroying the widget and recreating it (it used to do
+	this because it wasn't possible with the old list widget).
+
+	* xhippo.c: Freeze the list when adding items to it.
+
+	* xhippo.c: Stopped the list from scrolling when the selected item
+	is already visible.
+
+	* configure.in: Changed VERSION to 2.3.
+
+	* xhippo.c: Made the Mini checkbox get set correctly when the
+	window was saved in the mini state; bug reported and patched by
+	Kevin Everets.
+
+	* xhippo.c: Tidied up the while() loop when reading a playlist
+	(duplicate check for feof()).
+
+2000-07-18  Adam Sampson  <azz@gnu.org>
+
+	* xhippo.c: Added pause functions, implemented by Kevin Everets
+ 	<kevin.everets@alcatel.com>.
+
+	* xhippo.c: Turned Mini into a checkbox.
+
+	* xhippo.c: Localised Random.
+
+	* xhippo.c: Made extension comparison
+ 	case-insensitive. Implemented an strcasecmp for systems that don't
+ 	have it and modified configure.in accordingly. Modified
+	xhippo.config to remove duplicate type entries.
+
+	* Makefile.am: Stopped shipping the formatted versions of the
+	documentation.
+
+2000-03-08  Adam Sampson  <azz@gnu.org>
+
+	* xhippo.config (ordered): Added "ordered" to the config file.
+
+	* configure.in (VERSION): Changed to 2.2.
+
+2000-03-07  Adam Sampson  <azz@gnu.org>
+
+	* xhippo.c: Wow, it's been a long time since I worked on this. I
+	wasn't expecting to do any more work on this version, but I got a
+	request from "TSC" yesterday who wanted a non-random mode, and as
+	using a CList makes this rather easy, it's in there.
+
+1999-11-19  Adam Sampson  <azz@gnu.org>
+
+	* xhippo.c: Fixed the code in add_file to cope correctly with
+	non-absolute pathnames. Changed version to 2.1. Moved the line
+	that sets a flag in the randomtab[] array to handle_listclick, so
+	that if you explicitly pick a song the randomiser won't pick it
+	again until it's exhausted the list (another CList
+	advantage!). Note to self: there's an extended ID3 format floating
+	around; the ID3 code should probably handle this. It should
+	probably also gracefully handle non-MP3 files.
+
+1999-11-02  Adam Sampson  <azz@gnu.org>
+
+	* xhippo.c: Changed version to 2.0. A while ago I forked this
+	version to experiment with using a CList rather than a List; I
+	think this will be the way to go in the future, so I'm sticking
+	with it. The scrolled window now always has the side scrollbar
+	and never the bottom one; this was HiP's behaviour, and I rather
+	liked it. It occurred to me that I hadn't done much development on
+	xhippo since it became a GNU project, so I figured that it was
+	time to spend some time on the improved version and tidy it up a
+	little. Reenabled scroll_catchup that I'd commented out; it now
+	works but gets positioning slightly wrong. Made the load requester
+	OK handler scroll the list back up to the top. Added -Wall to the
+	compilation options to find compiler warnings (and removed
+	them). Noticed that ID3 tag reading is horribly broken, reading
+	(apparently) 4 more characters than it should; fixed, although I
+	don't have the ID3 spec to fix it properly.  Added HiP-esque
+	keyboard accelerators for Stop and Random. (I've bound both KP*
+	and KP- to Random because on the Amiga keyboard the star is in the
+	top right corner. I have no idea what HiP's accelerator for Stop
+	was, so I've bound / to it.) Fixed the Restart button (adding
+	last_played along the way). Also, I have no idea what I did, but
+	it fixed the resizing problem, so that's good. Checked the look of
+	the interface with several GTK themes... it's looking good!
+	(Particularly with XFCE.)
+
+1999-08-05  Adam Sampson  <azz@gnu.org>
+
+	* xhippo.c: Added a configure option to turn the GNOME menubar on
+	and off.
+
+	* configure.in (VERSION): Upped to 1.2.
+	(AC_ARG_WITH): Fixed spacing in configure --help.
+
+	* xhippo.c: Added code to store the size of the window as well as
+	the position (as I'm now using a bigger display).
+
+1999-08-01  Adam Sampson  <azz@gnu.org>
+
+	* configure.in (VERSION): Upped to 1.1 and uploaded.
+
+	* xhippo.c: Added Rod Taylor's patch (#ifndef NOGETOPTLONG), which
+	is meant to fix compilation on BSD systems.
+
+1999-07-03  Adam Sampson  <azz@gnu.org>
+
+	* configure.in: Altered check for getopt_long to set a variable if
+	not found (rather than dying), and added a check for getopt (on
+	the grounds that if you don't have getopt, you can't possibly have
+	getopt_long!).
+	(VERSION): Bumped version to 1.05 and uploaded.
+
+	* xhippo.c: Added code to cope with systems that don't have
+	getopt_long (like FreeBSD).
+
+1999-07-02  Adam Sampson  <azz@gnu.org>
+
+	* Makefile.am (CPPFLAGS): Changed datadir to sysconfdir, as
+	recommended by Rod Taylor (who also maintains the FreeBSD port).
+
+1999-06-13  Adam Sampson  <azz@josstix.demon.co.uk>
+
+	* xhippo.config (type): Added capital versions of the mod types.
+
+1999-06-12  Adam Sampson  <azz@josstix.demon.co.uk>
+
+	* Makefile.am (dist-hook): Added rules to copy the doc/ directory.
+
+	* xhippo.c: Added a GNOME menu item for Mini. Added getopt support
+	and updated the help description for long options. Updated the
+	--version output to fit the GNU standards.
+
+	* xhippo.c: Xhippo is now officially a GNU program!
+
+1999-06-07  Adam Sampson  <azz@josstix.demon.co.uk>
+
+	* configure.in (VERSION): Bumped version to 0.95.
+
+	* xhippo.c: Removed my ugly kludge for window resizing and
+	replaced it with a gtk_window_set_policy call in the right place,
+	as suggested by Trog <trog@gtk.org>.
+
+1999-06-05  Adam Sampson  <azz@josstix.demon.co.uk>
+
+	* xhippo.c: Changed winpos to winstate, and made xhippo save
+	whether the window is minified or not.
+
+	* xhippo.config: Added entries for savewinpos and startmini. Also
+	added filetypes for "mov" and "avi" files using xanim.
+
+	* xhippo.c: Added mode_start_mini and mode_save_window_pos, along
+	with all the trappings and language strings.
+
+	* xhippo.h (STRNOPLAYLIST): Added language strings for Mini.
+
+	* xhippo.c: Added lots of stuff to handle the Mini button. I'm not
+	happy with the way resizing the window is handled, though, nor
+	with the constant -2 in void status().
+
+	* configure.in (VERSION): Bumped version to 0.9.
+
+1999-05-26  Adam Sampson  <azz@josstix.demon.co.uk>
+
+	* xhippo.c: Removed the GNOME-specific handle_menu_X
+	functions. The button-related versions work just as well.
+
+	* README: Added entries for the Load button.
+
+	* configure.in (VERSION): Bumped version to 0.85.
+
+	* xhippo.c: Fixed the gchar-always-one-byte assumption in
+	read_mp3_tag.
+	Made lots of modifications to allow the Load button. This included
+	moving the handle_X functions to after the playlist-loading
+	functions; adding a button definition; adding handlers for the new
+	button; adding a variable for the file selector; adding handlers
+	for the file selector; abstracting the construction of the
+	playlist widget out into a function.
+	I am not entirely happy with the way this is implemented; it isn't
+	very pretty. It may cause a memory leak too---I don't know if GTK
+	is clever enough to gtk_widget_destroy all subwidgets of a
+	container when the container (the list in this case) is
+	destroyed. However, the users get what they want.
+
+1999-03-24  Adam Sampson  <azz@josstix.demon.co.uk>
+
+	* xhippo.c: Replaced the waitpid() call with a wait(NULL) in the
+	SIGCHLD handler (which is what uwm does). This works at least as
+	well as the old system and is much simpler. And I can't provoke it
+	into producing zombies any more. Also renamed kludgeflag to
+	childnotfinished, to make it a little easier to understand, and
+	removed the following large and obnoxious comment: "/* This kludge
+	seems to improve the "hanging GTK" bug.  * "kludgeflag" is set to
+	0 only when the SIGCHLD signal is receieved.  * I think what was
+	happening is that the SIGCHLD was trying to start * another child
+	which couldn't open the audio device and so died * immediately --
+	starting another child. The resulting chain reaction * hung
+	xhippo. The donotstopflag variable is also part of this kludge.
+	*/"
+
+1999-03-21  Adam Sampson  <azz@josstix.demon.co.uk>
+
+	* xhippo.config (type): Added "MP3" as an extension. D'oh!
+
+1999-03-15  Adam Sampson  <azz@josstix.demon.co.uk>
+
+	* configure.in (VERSION): Hiked version to 0.8.
+
+	* xhippo.c: Fixed an off-by-one error when trying to guess the
+	file's type; it initialised the "type" pointer one gchar after the
+	null, so occasionally (such as when I dropped Summer of '69 onto
+	the interface!) it would pick up the string following it in the
+	data area ("Gtk") as the name, and hence fail miserably to
+	correctly guess the type.
+	
+1999-03-14  Adam Sampson  <azz@josstix.demon.co.uk>
+
+	* xhippo.c (dndDrop): Added GNOME drag-and-drop support.
+
+	* README: Released and announced 0.7.
+	
+1999-03-13  Adam Sampson  <azz@josstix.demon.co.uk>
+
+	* configure.in: Created. Today was autoconf day. Moved everything
+	(hopefully) over. I must admit that automake/autoconf makes
+	several things that were extremely hacky before work just fine.
+	GTK version autodetect added. GNOMification and German support
+	were made configure options rather than Makefile options.
+
+	* Makefile.am: Created. Also copied in install-sh.
+
+1999-03-08  Adam Sampson  <azz@josstix.demon.co.uk>
+
+	* xhippo.c: Added GNOME stuff.
+
+	* Makefile: Added GNOME stuff.
+
+1999-03-02  Adam Sampson  <azz@josstix.demon.co.uk>
+
+	* xhippo.c: Made the readid3 option actually work. :)
+
+1999-02-28  Adam Sampson  <azz@josstix.demon.co.uk>
+
+	* Makefile (distro): Added xhippo.gtkrc to the list of distro
+	files. D'oh!
+
+	* xhippo.gtkrc: Added the font change to the style.
+
+	* Makefile (VERSION): Bumped version to 0.7.
+
+	* README: Added entry for readid3.
+
+	* xhippo.config: Added entry for readid3.
+
+	* xhippo.c: Merged in the changes from Craig Knudsen to read ID3
+	tags, and added code to handle the readid3 and -i options.
+
+1999-02-24  Adam Sampson  <azz@josstix.demon.co.uk>
+
+	* Makefile: Added a note about installation into your home
+	directory.
+
+	* README: Documented the changes below. Also credited Hubert
+	Fehrer for his NetBSD package, and added a comment about automatic
+	production of playlists.
+
+	* Makefile: Added automatic version numbering of the tarball; the
+	VERSION define is now set in the Makefile. This is much cleaner
+	than the way it was done before. Suggested by Hubert Feyrer to
+	make NetBSD packaging easier.
+	(VERSION): Bumped version to 0.6.
+
+	* xhippo.c: Added playlist inclusion by !filename in a playlist,
+	requested by Joseph Turian.
+
+1999-02-23  Adam Sampson  <azz@josstix.demon.co.uk>
+
+	* README: Uploaded 0.5, updated the web pages and announced it on
+	Freshmeat.
+	
+1999-02-07  Adam Sampson  <azz@josstix.demon.co.uk>
+
+	* README: It ought to be mentioned that I fixed the inconsistent
+	spelling of "GTK" throughout this a few days ago, and forget to
+	mention it here.
+
+	* xhippo.gtkrc: Made a style for all widgets that darkened the
+	background grey to Grey76, in order to match icewm, Netscape and
+	most other apps.
+
+	* xhippo.c: Added must_play_all mode, to improve the randomness of
+ 	the selection from the list.  Added show_pid mode, so that users
+	(hi Volker!) can turn off the (pid xxx) display.
+
+1999-02-03  Adam Sampson  <azz@josstix.demon.co.uk>
+
+	* xhippo.h (VERSION_STRING): Bumped version to 0.5 (as I wanted to
+	send Volker a copy).
+
+1999-02-01  Adam Sampson  <azz@josstix.demon.co.uk>
+
+	* xhippo.c: Fixed the gtk 1.1 problem. Just did what the error
+	message said to do.
+
+1999-01-24  Adam Sampson  <azz@josstix.demon.co.uk>
+
+	* Makefile (distro): Made distro create a directory into which the 
+	xhippo distribution is put before archiving; this makes it easier
+	to unpack.
+
+	* README: Changed titles from "---" to "***". Added references to
+	contrib directory.
+
+	* contrib/README: Created. Added Jeff Covey's
+	xhippo-chooser.pl. Moved Volker's German docs into this
+	directory.
+
+	* README: Various changes to refer to ".xhippo/config" rather than 
+	".xhippo.config" etc.
+
+	* xhippo.c: Various changes to enable the use of the ".xhippo"
+	directory rather than lots of files in your home directory. This
+	was essentially Jeff Covey's idea.
+
+	* gtkrc: Created.
+
+	* xhippo.c: Added "mode_scroll_catchup" to turn the new scroll
+	feature on and off, and the "-s" and "scroll" commands.
+
+	For some reason, gtkrc support doesn't work at all. Whether this
+	is due to xhippo or the old gtk that I'm using is unknown.
+
+	* xhippo.config (scroll): Added entry for "scroll".
+
+	* xhippo.h (VERSION_STRING): Bumped version to 0.4.
+
+	* xhippo.c: xhippo now scrolls the list to keep up with
+	randomly-picked songs. It's not very pretty at the moment, but it
+	works.
+
+1999-01-19  Adam Sampson  <azz@josstix.demon.co.uk>
+
+	* xhippo.c: Received bug report from Hubert Feyrer,
+	hubert.feyrer@rz.uni-regensburg.de, saying that under Gtk 1.1 the
+	scrollbars don't appear, giving an error message saying to use
+	"gtk_scrolled_window_add_with_viewport()" rather than
+	"gtk_scrolled_window_add()". Given that neither of these exist
+	(apparently) under the Gtk that I'm using, I suspect that this is
+	a Gtk 1.1 compatability problem.
+
+	Noticed another bug: non-absolute filenames get truncated; not
+	sure why yet.
+
+	* Makefile: Received bug report from Hubert Feyrer,
+	hubert.feyrer@rz.uni-regensburg.de; I'd forgotten that
+	ETCDEST was also in config.h. It now uses one PREFIX variable
+	rather than BINDEST and ETCDEST, and defines SYSTEMXHIPPOCONFIG in 
+	the Makefile.
+
+1999-01-18  Adam Sampson  <azz@josstix.demon.co.uk
+
+	* README: xhippo 0.3 was announced on Freshmeat today.
+	
+1999-01-10  Adam Sampson  <azz@josstix.demon.co.uk>
+
+	* xhippo.xpm: Produced this image by screengrabbing the Amiga
+ 	emulator. This means the colours are slightly wrong. Made
+ 	transparent by hand.
+
+1999-01-09  Adam Sampson  <azz@josstix.demon.co.uk>
+
+	* Makefile: Added xhippo.config to "make install".
+	(distro): Added "distro" rule to make a tarball.
+
+	* README: Updated.
+
+	* xhippo.c: Removed a spurious g_print(rcname).
+	
+	Added config file support. This meant splitting the "read
+	playlist" routine into another function.
+
+	* xhippo.h: Split most of the definitions into this file.
+
+	* README.fvwm2: Split fvwm configuration stuff into this file.
+
+	* Makefile: Added the "make install" rule.
+
+	* xhippo.c: Incorporated Volker's German localisation and LIESMICH 
+	file.  
+
+	Made the strings read "Playing with ... (pid ...)", to stop
+	confusing Volker. :-)
+
+	Added a define for the version. Bumped the version to 0.3.
+	
+	Removed the STRWINTITLE strings from the localisations. This is
+	now always ("xhippo %s", VERSION_STRING).
+	
+1999-01-04  Adam Sampson  <azz@josstix.demon.co.uk>
+
+	* xhippo.c: Changed "mikmod" to "xmp -f44100". xmp sounds better,
+	is freer, uses less CPU time and doesn't use curses. In general,
+	it's better for xhippo.
+
+	Added a few lines to read ~/.xhippo.gtkrc, and some names for the
+	widgets. Implemented using conventional C strings for now until
+	glib's string handling is better documented!
+

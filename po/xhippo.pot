@@ -1,0 +1,310 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR Adam Sampson
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2007-08-27 22:39+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: callbacks.c:268 xhippo.c:348
+msgid "Song information"
+msgstr ""
+
+#: callbacks.c:275
+msgid "Name:"
+msgstr ""
+
+#: callbacks.c:276
+msgid "Filename:"
+msgstr ""
+
+#: callbacks.c:280
+msgid "Last modified:"
+msgstr ""
+
+#: callbacks.c:282
+msgid "File size:"
+msgstr ""
+
+#: callbacks.c:317 xhippo.c:358
+msgid "Load playlist"
+msgstr ""
+
+#: callbacks.c:335 xhippo.c:359
+msgid "Save playlist"
+msgstr ""
+
+#: callbacks.c:350 xhippo.c:353
+msgid "Add song"
+msgstr ""
+
+#: callbacks.c:365 xhippo.c:355
+msgid "Add directory"
+msgstr ""
+
+#: config.c:95
+msgid "Start playing automatically"
+msgstr ""
+
+#: config.c:97
+msgid "Scroll the list when moving to a new song"
+msgstr ""
+
+#: config.c:99
+msgid "Place the scrollbar on the left of the window"
+msgstr ""
+
+#: config.c:101
+msgid "Avoid repeating songs when picking randomly"
+msgstr ""
+
+#: config.c:103
+msgid "Stop at end of playlist"
+msgstr ""
+
+#: config.c:105
+msgid "Show the PID of the player process"
+msgstr ""
+
+#: config.c:107
+msgid "Read ID3 tags from MP3 files"
+msgstr ""
+
+#: config.c:109
+msgid "Save window position and size on exit"
+msgstr ""
+
+#: config.c:111
+msgid "Start up with Mini turned on"
+msgstr ""
+
+#: config.c:113
+msgid "Start up with Random turned off"
+msgstr ""
+
+#: config.c:115
+msgid "Don't display the extension of files in the playlist"
+msgstr ""
+
+#: config.c:118
+msgid "Hide the output of all players"
+msgstr ""
+
+#: config.c:120
+msgid "Demangle file names"
+msgstr ""
+
+#: config.c:122
+msgid "Show the name of the current playlist in the window title"
+msgstr ""
+
+#: config.c:125
+msgid "Use the basename of the playlist when showing playlist name"
+msgstr ""
+
+#: config.c:128
+msgid "Don't check that files in the playlist exist"
+msgstr ""
+
+#: config.c:130
+msgid "Write the currently-playing song to $HOME/.xhippo/current_song"
+msgstr ""
+
+#: config.c:133
+msgid "On startup, command-line arguments are songs"
+msgstr ""
+
+#: config.c:135
+msgid "On startup, command-line arguments are directories"
+msgstr ""
+
+#: config.c:137
+msgid "Remove played songs from the playlist"
+msgstr ""
+
+#: config.c:139
+msgid "Autosave the playlist on exit and autoload it on startup"
+msgstr ""
+
+#: config.c:142
+msgid "On startup, guess the types of command-line arguments"
+msgstr ""
+
+#: config.c:145
+msgid "When autosaving, autosave playlist whenever a new song starts"
+msgstr ""
+
+#: config.c:148
+msgid "Number of path elements to strip (0 to strip all)"
+msgstr ""
+
+#: config.c:150
+msgid "Directory to save playlists in"
+msgstr ""
+
+#: config.c:152
+msgid "Type of sort to perform whenever a playlist is loaded"
+msgstr ""
+
+#: config.c:378
+msgid "Couldn't write to $HOME/.xhippo/winstate.\n"
+msgstr ""
+
+#: config.c:425 xhippo.c:367
+msgid "Preferences"
+msgstr ""
+
+#: playlist.c:262
+msgid "Unable to guess type."
+msgstr ""
+
+#: playlist.c:327
+#, c-format
+msgid "Unable to start player \"%s\".\n"
+msgstr ""
+
+#: playlist.c:372 playlist.c:418
+msgid "No items to pick from!"
+msgstr ""
+
+#: playlist.c:387 playlist.c:404
+msgid "All items played."
+msgstr ""
+
+#: playlist.c:534
+#, c-format
+msgid "Couldn't find \"%s\".\n"
+msgstr ""
+
+#: playlist.c:539
+#, c-format
+msgid "\"%s\" isn't a regular file.\n"
+msgstr ""
+
+#: playlist.c:739
+#, c-format
+msgid "Couldn't open playlist \"%s\"!\n"
+msgstr ""
+
+#: xhippo.c:62
+msgid "Paused"
+msgstr ""
+
+#: xhippo.c:71
+#, c-format
+msgid "Playing with %s (pid %d)"
+msgstr ""
+
+#: xhippo.c:74
+#, c-format
+msgid "Playing with %s."
+msgstr ""
+
+#: xhippo.c:79
+#, c-format
+msgid "Stopped."
+msgstr ""
+
+#: xhippo.c:183
+#, c-format
+msgid "You must set $HOME to your home directory.\n"
+msgstr ""
+
+#: xhippo.c:283
+msgid "Welcome to xhippo!"
+msgstr ""
+
+#: xhippo.c:295
+msgid "Restart"
+msgstr ""
+
+#: xhippo.c:295
+msgid "Restart the current song"
+msgstr ""
+
+#: xhippo.c:300
+msgid "Stop"
+msgstr ""
+
+#: xhippo.c:300
+msgid "Stop playing"
+msgstr ""
+
+#: xhippo.c:305
+msgid "Pause"
+msgstr ""
+
+#: xhippo.c:305
+msgid "Pause playing"
+msgstr ""
+
+#: xhippo.c:310
+msgid "Prev"
+msgstr ""
+
+#: xhippo.c:310
+msgid "Play the previous song"
+msgstr ""
+
+#: xhippo.c:313
+msgid "Next"
+msgstr ""
+
+#: xhippo.c:313
+msgid "Play the next song"
+msgstr ""
+
+#: xhippo.c:320
+msgid "Mini"
+msgstr ""
+
+#: xhippo.c:329
+msgid "Random"
+msgstr ""
+
+#: xhippo.c:349
+msgid "Move song up"
+msgstr ""
+
+#: xhippo.c:350
+msgid "Move song down"
+msgstr ""
+
+#: xhippo.c:351
+msgid "Remove song"
+msgstr ""
+
+#: xhippo.c:360
+msgid "Sort playlist by name"
+msgstr ""
+
+#: xhippo.c:361
+msgid "Sort playlist by swapped name"
+msgstr ""
+
+#: xhippo.c:363
+msgid "Sort playlist by mtime"
+msgstr ""
+
+#: xhippo.c:364
+msgid "Clear playlist"
+msgstr ""
+
+#: xhippo.c:369
+msgid "Quit"
+msgstr ""
+
+#: xhippo.c:707
+#, c-format
+msgid "%d files in list."
+msgstr ""

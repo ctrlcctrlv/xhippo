@@ -1,0 +1,26 @@
+Bugs
+~~~~
+
+*** Outstanding
+
+"widget" commands in gtkrc files don't work, at least on my
+system. This may be bad documentation on gtk's part, since
+"widget_class" commands work fine.
+
+GNOME stuff is not localised.
+
+Localisation should really use gettext rather than my current system.
+
+GNOME checks in configure.in aren't done correctly (but should work
+fine anyway).
+
+*** Fixed
+
+Sometimes xhippo leaves zombie player processes, sometimes not. I
+still don't understand why. [Fixed]
+
+[From Volker:] "Why is the number of entries in the list increased
+every time i klick onto a file?" Actually a misbug; it wasn't obvious
+or documented that the number in brackets in the "playing" message was
+the PID of the playing process. At least, I assume that's what Volker
+meant. Fixed now; it says "filename (pid number)".
