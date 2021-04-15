@@ -1,5 +1,7 @@
 # `xhippo`
 
+![](https://raw.githubusercontent.com/ctrlcctrlv/xhippo/main/doc/screenshot.png)
+
 Welcome to GNU xhippo, a generic front-end for sound players.
 
 The xhippo manual can be found in the doc/ subdirectory. By default it
